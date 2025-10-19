@@ -27,8 +27,8 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.anySet;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class PostServiceTest {
@@ -229,6 +229,7 @@ public class PostServiceTest {
 
         // THEN
         verify(postRepository).save(any());
+        verify(tagService).getTagByIds(anySet());
 
         assertNotNull(updatedPost);
         assertEquals(post.getId(), updatedPost.getId());
@@ -333,6 +334,7 @@ public class PostServiceTest {
 
         // THEN
         verify(postRepository).save(any());
+        verify(tagService, never()).getTagByIds(anySet());
 
         assertNotNull(updatedPost);
         assertEquals(post.getId(), updatedPost.getId());
