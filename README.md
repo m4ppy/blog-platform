@@ -24,14 +24,16 @@ src/
      ├── controllers/          # Auth, Category, Post, Tag, Error controllers
      ├── domain/
      │    ├── entities/        # Category, Post, Tag, User
-     │    ├── dtos/            # Data transfer objects
-     │    ├── mappers/         # MapStruct mappers
-     │    └── repositories/    # Spring Data JPA repositories
+     │    └── dtos/            # Data transfer objects
+     ├── mappers/              # MapStruct mappers
+     ├── repositories/         # Spring Data JPA repositories
      ├── security/             # JwtAuthenticationFilter, BlogUserDetailsService
      └── services/             # Business logic services
  └── test/
-     └── java/
-          # Unit & Integration tests (UserService, AuthController, etc.)
+     ├── controllers/          # Small integration tests for endpoints
+     ├── integration/          # Integration test for security, full logic
+     ├── repositories/         # Unit tests for repositories
+     └── services/             # Unit tests for services
 ```
 
 ---
@@ -70,10 +72,11 @@ docker run --name blog-postgres -e POSTGRES_PASSWORD=1234 -e POSTGRES_DB=blogdb 
 
 | Branch | Description |
 |---------|-------------|
-| `main` | Base project (from YouTube course) |
-| `test/user-service` | Unit tests for UserService |
-| `test/post-controller` | Integration tests for PostController |
-| `test/security-config` | Security config tests |
+| `main` | Full implemented project |
+| `test/repository` | Unit tests for Repository |
+| `test/service` | Unit tests for Service |
+| `test/controller` | Integration tests for Controller |
+| `test/security` | Security unit tests |
 | `test/integration` | Full app integration tests |
 | `docs/update-readme` | Documentation and README updates |
 
@@ -108,7 +111,7 @@ All branches are merged into `main` via pull requests.
 
 ## 🧾 Future Improvements
 
-- Add test coverage reports (JaCoCo)
+- Add role for User
 - Integrate CI/CD pipeline with GitHub Actions
 - Add refresh token mechanism
 - Expand API documentation with Swagger
@@ -142,5 +145,5 @@ All branches are merged into `main` via pull requests.
 
 ## 📜 License
 This project is for **learning and portfolio purposes only**.  
-The base structure follows a YouTube tutorial, but all tests and additional logic are implemented by me.
+The base is from YouTube course, but all tests and additional logic are implemented by me.
 source: https://youtu.be/Gd6AQsthXNY?si=WUWNrQ0ARfuUE688
