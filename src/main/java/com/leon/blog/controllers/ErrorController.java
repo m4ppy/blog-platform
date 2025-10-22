@@ -17,7 +17,7 @@ public class ErrorController {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiErrorResponse> handleException(Exception ex) {
-        log.error("Caught exception", ex);
+        log.error("Caught exception class: {}", ex.getClass().getName());
         ApiErrorResponse error = ApiErrorResponse.builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .message("An unexpected error occurred")
