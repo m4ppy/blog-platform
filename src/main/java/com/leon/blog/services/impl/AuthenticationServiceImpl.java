@@ -25,7 +25,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
 
-    @Value("${jwt.secret}")
+    @Value("${application.security.jwt.secret-key}")
     private String secretKey;
 
     private final Long jwtExpiryMs = 86400000L;
