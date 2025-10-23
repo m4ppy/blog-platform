@@ -146,4 +146,4 @@ All branches are merged into `main` via pull requests.
 ## 📜 License
 This project is for **learning and portfolio purposes only**.  
 The base is from YouTube course, but all tests and additional logic are implemented by me.
-source: https://youtu.be/Gd6AQsthXNY?si=WUWNrQ0ARfuUE688
+Source: https://youtu.be/Gd6AQsthXNY?si=WUWNrQ0ARfuUE688
