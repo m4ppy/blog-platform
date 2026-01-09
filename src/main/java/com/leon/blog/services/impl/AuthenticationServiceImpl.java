@@ -1,6 +1,7 @@
 package com.leon.blog.services.impl;
 
 import com.leon.blog.services.AuthenticationService;
+import com.leon.blog.services.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -24,6 +25,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
+    private final UserService userService;
 
     @Value("${application.security.jwt.secret-key}")
     private String secretKey;
