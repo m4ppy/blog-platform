@@ -8,14 +8,19 @@ import com.leon.blog.domain.dtos.UpdatePostRequestDto;
 import com.leon.blog.domain.entities.Post;
 import com.leon.blog.domain.entities.User;
 import com.leon.blog.mappers.PostMapper;
+import com.leon.blog.security.BlogUserDetails;
 import com.leon.blog.services.PostService;
 import com.leon.blog.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.UUID;
 
@@ -49,8 +54,11 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<PostDto> createPost(
-            @Valid @RequestBody CreatePostRequestDto createPostRequestDto,
-            @RequestAttribute UUID userId) {
+            @Valid @RequestBody CreatePostRequestDto createPostRequestDto
+    ) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        BlogUserDetails userDetails = (BlogUserDetails) authentication.getPrincipal();
+        UUID userId = userDetails.getId();
         User loggedInUser = userService.getUserById(userId);
         CreatePostRequest createPostRequest = postMapper.toCreatePostRequest(createPostRequestDto);
         Post createdPost = postService.createPost(loggedInUser, createPostRequest);
@@ -62,9 +70,18 @@ public class PostController {
     public ResponseEntity<PostDto> updatePost(
             @PathVariable UUID id,
             @Valid @RequestBody UpdatePostRequestDto updatePostRequestDto) {
+        System.out.println("update post controller reached!!");
+        BlogUserDetails userDetails = (BlogUserDetails) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        User loggedInUser = userService.getUserById(userDetails.getId());
+
         UpdatePostRequest updatePostRequest = postMapper.toUpdatePostRequest(updatePostRequestDto);
-        Post updatedPost = postService.updatePost(id, updatePostRequest);
+        Post updatedPost = postService.updatePost(id, loggedInUser, updatePostRequest);
         PostDto updatedPostDto = postMapper.toDto(updatedPost);
+
         return ResponseEntity.ok(updatedPostDto);
     }
 

@@ -3,6 +3,7 @@ package com.leon.blog.controllers;
 import com.leon.blog.domain.dtos.AuthResponse;
 import com.leon.blog.domain.dtos.LoginRequest;
 import com.leon.blog.domain.dtos.RegisterRequest;
+import com.leon.blog.security.BlogUserDetails;
 import com.leon.blog.services.AuthenticationService;
 import com.leon.blog.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -42,8 +43,8 @@ public class AuthController {
 
         String tokenValue = authenticationService.generateToken(userDetails);
 
-        AuthResponse authResponse = AuthResponse.builder().
-                token(tokenValue)
+        AuthResponse authResponse = AuthResponse.builder()
+                .token(tokenValue)
                 .expiresIn(86400)
                 .build();
         return ResponseEntity.ok(authResponse);
