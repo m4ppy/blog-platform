@@ -13,6 +13,7 @@ import com.leon.blog.services.PostService;
 import com.leon.blog.services.TagService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -96,8 +97,11 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     @Override
-    public Post updatePost(UUID id, UpdatePostRequest updatePostRequest) {
+    public Post updatePost(UUID id, User user, UpdatePostRequest updatePostRequest) {
         Post existingPost = postRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Post does not exist with id " + id));
+        if (!existingPost.getAuthor().getId().equals(user.getId())) {
+            throw new AccessDeniedException("Forbidden");
+        }
         existingPost.setTitle(updatePostRequest.getTitle());
         String postContent = updatePostRequest.getContent();
         existingPost.setContent(postContent);

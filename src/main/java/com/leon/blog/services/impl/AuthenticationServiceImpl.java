@@ -1,5 +1,6 @@
 package com.leon.blog.services.impl;
 
+import com.leon.blog.security.BlogUserDetails;
 import com.leon.blog.services.AuthenticationService;
 import com.leon.blog.services.UserService;
 import io.jsonwebtoken.Claims;
@@ -18,6 +19,7 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -25,12 +27,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
-    private final UserService userService;
 
     @Value("${application.security.jwt.secret-key}")
     private String secretKey;
 
-    private final Long jwtExpiryMs = 86400000L;
+    @Value("${application.security.jwt.expiration}")
+    private Long jwtExpiryMs;
 
     @Override
     public UserDetails authenticate(String email, String password) {
@@ -42,6 +44,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public String generateToken(UserDetails userDetails) {
+        BlogUserDetails blogUserDetails = (BlogUserDetails) userDetails;
         Map<String, Object> claims = new HashMap<>();
         return Jwts.builder()
                 .setClaims(claims)
@@ -59,12 +62,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     private String extractUsername(String token) {
-        Claims claims = Jwts.parserBuilder()
+        return Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
-                .getBody();
-        return claims.getSubject();
+                .getBody()
+                .getSubject();
     }
 
     private Key getSigningKey() {

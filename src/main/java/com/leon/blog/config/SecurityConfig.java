@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -39,10 +40,16 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/register").permitAll()
+
+                        .requestMatchers(HttpMethod.POST, "/api/v1/posts").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/posts/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/posts/**").authenticated()
+
                         .requestMatchers(HttpMethod.GET, "/api/v1/posts/drafts").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/v1/posts/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/categories/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/tags/**").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf.disable())
