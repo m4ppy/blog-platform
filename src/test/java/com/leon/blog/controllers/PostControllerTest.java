@@ -158,7 +158,6 @@ class PostControllerTest {
         UUID postId = UUID.randomUUID();
 
         UpdatePostRequestDto updatePostRequestDto = UpdatePostRequestDto.builder()
-                .id(postId)
                 .title("Updated Title")
                 .content("Updated Content")
                 .categoryId(UUID.randomUUID())
