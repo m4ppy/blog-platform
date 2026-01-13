@@ -125,8 +125,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void deletePost(UUID id) {
+    public void deletePost(UUID id, User user) {
         Post post = getPost(id);
+        if(!user.getId().equals(post.getAuthor().getId())) {
+            throw new AccessDeniedException("Forbidden");
+        }
         postRepository.delete(post);
     }
 
