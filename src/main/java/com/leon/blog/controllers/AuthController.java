@@ -6,6 +6,7 @@ import com.leon.blog.domain.dtos.RegisterRequest;
 import com.leon.blog.security.BlogUserDetails;
 import com.leon.blog.services.AuthenticationService;
 import com.leon.blog.services.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -38,7 +39,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest register) {
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest register) {
         UserDetails userDetails = userService.register(register);
 
         String tokenValue = authenticationService.generateToken(userDetails);
