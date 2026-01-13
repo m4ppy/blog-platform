@@ -56,10 +56,13 @@ public class PostController {
     public ResponseEntity<PostDto> createPost(
             @Valid @RequestBody CreatePostRequestDto createPostRequestDto
     ) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        BlogUserDetails userDetails = (BlogUserDetails) authentication.getPrincipal();
-        UUID userId = userDetails.getId();
-        User loggedInUser = userService.getUserById(userId);
+        BlogUserDetails userDetails = (BlogUserDetails) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        User loggedInUser = userService.getUserById(userDetails.getId());
+
         CreatePostRequest createPostRequest = postMapper.toCreatePostRequest(createPostRequestDto);
         Post createdPost = postService.createPost(loggedInUser, createPostRequest);
         PostDto createdPostDto = postMapper.toDto(createdPost);
@@ -71,6 +74,7 @@ public class PostController {
             @PathVariable UUID id,
             @Valid @RequestBody UpdatePostRequestDto updatePostRequestDto) {
         System.out.println("update post controller reached!!");
+
         BlogUserDetails userDetails = (BlogUserDetails) SecurityContextHolder
                 .getContext()
                 .getAuthentication()
@@ -96,7 +100,13 @@ public class PostController {
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> deletePost(@PathVariable UUID id) {
-        postService.deletePost(id);
+        BlogUserDetails userDetails = (BlogUserDetails) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        User loggedInUser = userService.getUserById(userDetails.getId());
+        postService.deletePost(id, loggedInUser);
         return ResponseEntity.noContent().build();
     }
 
